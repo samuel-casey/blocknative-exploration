@@ -33,7 +33,6 @@ const App = (): JSX.Element => {
     e.preventDefault();
     const accounts = await web3.eth.getAccounts()
     const address = accounts[0]
-    console.log(accounts)
 
     const txOptions = {
       to: runkelbug,
