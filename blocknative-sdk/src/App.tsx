@@ -19,6 +19,7 @@ const provider = window.ethereum
 const web3 = new Web3(provider)
 
 const rinkelborg = '0xD3a4CCF97122DA15750E50d3E97B54DF1D71DAA5'
+const runkelbug = '0x11113c2fba9ae08d7d16c817f03de51f29117db2'
 
 interface Itx {
   hash: string;
@@ -35,9 +36,9 @@ const App = (): JSX.Element => {
     console.log(accounts)
 
     const txOptions = {
-      to: rinkelborg,
+      to: runkelbug,
       from: address,
-      value: web3.utils.toWei("0.0001")
+      value: web3.utils.toWei("0.03")
     }
 
     web3.eth.sendTransaction(txOptions)
