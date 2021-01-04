@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Web3 from 'web3';
 import blocknativeSDK from 'bnc-sdk';
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import './App.css';
 
 const DAPP_ID: string = '1e6835da-e541-4da6-bec2-e5047dc0031e'
@@ -19,7 +21,7 @@ const provider = window.ethereum
 const web3 = new Web3(provider)
 
 const rinkelborg = '0xD3a4CCF97122DA15750E50d3E97B54DF1D71DAA5'
-const runkelbug = '0x11113c2fba9ae08d7d16c817f03de51f29117db2'
+const runklebug = '0x11113c2fba9ae08d7d16c817f03de51f29117db2'
 
 interface Itx {
   hash: string;
@@ -27,7 +29,8 @@ interface Itx {
 
 const App = (): JSX.Element => {
 
-  const [txs, setTxs] = useState<Itx[] | any>()
+  const [txs, setTxs] = useState<Itx[] | any>([])
+  const [status, setStatus] = useState<any>()
 
   const sendTx = async (e: any): Promise<any> => {
     e.preventDefault();
@@ -35,9 +38,9 @@ const App = (): JSX.Element => {
     const address = accounts[0]
 
     const txOptions = {
-      to: runkelbug,
+      to: runklebug,
       from: address,
-      value: web3.utils.toWei("0.03")
+      value: web3.utils.toWei("0.00000001")
     }
 
     web3.eth.sendTransaction(txOptions)
@@ -47,21 +50,37 @@ const App = (): JSX.Element => {
         emitter.on('txPool', transaction => {
           console.log(transaction)
           console.log('tx in mempool')
+          setStatus('pending')
         })
 
         emitter.on('txConfirmed', (transaction: any) => {
           console.log(transaction)
           console.log('tx confirmed')
           setTxs((prevTxs: any) => [...prevTxs, { hash: transaction.hash }])
+          setStatus('complete')
         })
       })
-
-    const randos: string[] = ['brown', 'slinging slasher', 'potato']
-    const theHash: string = randos[Math.floor(Math.random() * randos.length)]
-    setTxs([{ hash: theHash }])
   }
 
-  const txData = txs ? txs.map((tx: any) => <p key={tx.hash}>{tx.hash}</p>) : 'no tx Data yet';
+  const txData = txs ? txs.map((tx: any) => <p key={tx.hash}>{tx.hash}</p>) : null;
+
+  let txStatus;
+
+  switch (status) {
+    case 'pending':
+      txStatus = <Loader type="Puff"
+        color="#00BFFF"
+        height={100}
+        width={100}
+        timeout={3000} />
+      break;
+    case 'complete':
+      txStatus = <p>TX COMPLETE:</p>
+      break;
+    default:
+      txStatus = 'Waiting for tx to be sent via MetaMask'
+      break;
+  }
 
   return (
     <div className="App">
@@ -69,6 +88,8 @@ const App = (): JSX.Element => {
         <button onClick={sendTx}>Send Transaction</button>
       </header>
       <main>
+        <div>{txStatus}</div>
+        <h3>Tramsactions</h3>
         <div>{txData}</div>
       </main>
     </div>
