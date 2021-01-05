@@ -56,13 +56,14 @@ const App = (): JSX.Element => {
         emitter.on('txConfirmed', (transaction: any) => {
           console.log(transaction)
           console.log('tx confirmed')
-          setTxs((prevTxs: any) => [...prevTxs, { hash: transaction.hash }])
+          setTxs((prevTxs: any) => [...prevTxs, { hash: transaction.hash, value: transaction.value }])
           setStatus('complete')
         })
       })
   }
 
-  const txData = txs ? txs.map((tx: any) => <p key={tx.hash}>{tx.hash}</p>) : null;
+  const txData = txs ? txs.map((tx: any) => <><p key={tx.hash}>tx: {tx.hash}: {web3.utils.fromWei(tx.value)} ether</p></>) : null;
+
 
   let txStatus;
 
@@ -75,7 +76,9 @@ const App = (): JSX.Element => {
         timeout={3000} />
       break;
     case 'complete':
-      txStatus = <p>TX COMPLETE:</p>
+      const lastTx = txs.length > 0 ? txs.slice(txs.length - 1, 1)[0].hash : 'womp'
+      console.log(lastTx)
+      txStatus = <p>TX {lastTx} COMPLETE</p>
       break;
     default:
       txStatus = 'Waiting for tx to be sent via MetaMask'
@@ -89,7 +92,7 @@ const App = (): JSX.Element => {
       </header>
       <main>
         <div>{txStatus}</div>
-        <h3>Tramsactions</h3>
+        <h3>Transactions</h3>
         <div>{txData}</div>
       </main>
     </div>
