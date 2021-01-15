@@ -1,21 +1,35 @@
+require('dotenv').config();
 const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 // Initialize express and define a port
-const app = express();
-const PORT = 4000;
+const { PORT } = process.env;
 
 // Tell express to use body-parser's JSON parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_req, res) => {
-	res.send('hi');
+	res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/', (req, res) => {
-	console.log('body', req.body);
-	res.status(200).send('hook'); // Responding is important
+io.on('connection', (socket) => {
+	console.log('user connected');
+	socket.on('disconnect', () => {
+		console.log('user disconnected');
+	});
 });
 
-// Start express on the defined port
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.post('/blocknative-webhook', (req, res) => {
+	try {
+		console.log('body', req.body);
+		io.sockets.emit('tx', req.body);
+		res.status(200).send('hook'); // Responding is important
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+http.listen(PORT, () => console.log(`🚀 ${PORT}`));

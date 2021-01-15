@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>DeFlow</title>
+		<script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+	</head>
+	<body>
+		<h1>DeFlow</h1>
+		<div id="output"></div>
+		<div
+			id="inflows"
+			style="background-color: green; color: white; width: 3px"
+		></div>
+		<div
+			id="outflows"
+			style="background-color: red; color: white; width: 3px"
+		></div>
+	</body>
+	<script>
+		const socket = io();
+		const output = document.getElementById('output');
+		const inflowsEl = document.getElementById('inflows');
+		const outflowsEl = document.getElementById('outflows');
+		let inflows = 0;
+		let outflows = 0;
+		console.log(output);
+		socket.on('tx', (body) => {
+			console.log(body);
+
+			inflowsEl.innerText = '';
+			outflowsEl.innerText = '';
+
+			switch (body.direction) {
+				case 'incoming':
+					inflows += +body.value / 10 ** 18;
+					break;
+				case 'outgoing':
+					outflows += +body.value / 10 ** 18;
+					break;
+				default:
+					break;
+			}
+
+			inflowsEl.innerText = inflows;
+			outflowsEl.innerText = outflows;
+
+			inflowsEl.style.width = inflows * 500000 + 'px';
+			outflowsEl.style.width = inflows * 500000 + 'px';
+		});
+	</script>
+</html>
