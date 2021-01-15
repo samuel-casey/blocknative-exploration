@@ -28,10 +28,23 @@ app.get('/', (_req, res) => {
 	}
 });
 
+let interval;
+
+const getApiAndEmit = (socket) => {
+	const response = new Date();
+	// Emitting a new message. Will be consumed by the client
+	socket.emit('FromAPI', response);
+};
+
 io.on('connection', (socket) => {
 	console.log('user connected:', socket.id);
+	if (interval) {
+		clearInterval(interval);
+	}
+	interval = setInterval(() => getApiAndEmit(socket), 1000);
 	socket.on('disconnect', () => {
 		console.log('user disconnected', socket.id);
+		clearInterval(interval);
 	});
 });
 
