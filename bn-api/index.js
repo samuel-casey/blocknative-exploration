@@ -3,7 +3,14 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+
+const options = {
+	cors: {
+		origin: '*',
+	},
+};
+
+const io = require('socket.io')(http, options);
 
 // Initialize express and define a port
 const { PORT } = process.env;
@@ -21,24 +28,10 @@ app.get('/', (_req, res) => {
 	}
 });
 
-let interval;
-
-const getApiAndEmit = (socket) => {
-	console.log('getApiAndEmit');
-	const response = new Date();
-	// Emitting a new message. Will be consumed by the client
-	socket.emit('FromAPI', response);
-};
-
 io.on('connection', (socket) => {
-	console.log('user connected');
-
-	if (interval) clearInterval(interval);
-
-	interval = setInterval(() => getApiAndEmit(socket), 1000);
-
+	console.log('user connected:', socket.id);
 	socket.on('disconnect', () => {
-		console.log('user disconnected');
+		console.log('user disconnected', socket.id);
 	});
 });
 
