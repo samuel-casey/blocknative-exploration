@@ -3,7 +3,7 @@ import openSocket from 'socket.io-client';
 import axios from 'axios';
 import './App.css';
 
-const ENDPOINT = 'http://4b6ce298b306.ngrok.io';
+const ENDPOINT = 'http://4b6ce298b306.ngrok.io/';
 
 function App() {
 	const [transactions, setTransactions] = useState([]);

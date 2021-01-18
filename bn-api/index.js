@@ -32,11 +32,13 @@ io.on('connection', (socket) => {
 	console.log('user connected:', socket.id);
 	socket.on('disconnect', () => {
 		console.log('user disconnected', socket.id);
-		clearInterval(interval);
 	});
 });
 
 // http://4b6ce298b306.ngrok.io/blocknative-hook -- 1/17 WBTC-ETH local webhook
+
+// 0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc -- USDC-ETH
+// 0xbb2b8038a1640196fbe3e38816f3e67cba72d940 -- WBTC-ETH
 
 app.post('/blocknative-hook', (req, res) => {
 	try {
