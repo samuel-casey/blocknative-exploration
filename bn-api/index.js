@@ -28,25 +28,15 @@ app.get('/', (_req, res) => {
 	}
 });
 
-let interval;
-
-const getApiAndEmit = (socket) => {
-	const response = new Date();
-	// Emitting a new message. Will be consumed by the client
-	socket.emit('FromAPI', response);
-};
-
 io.on('connection', (socket) => {
 	console.log('user connected:', socket.id);
-	if (interval) {
-		clearInterval(interval);
-	}
-	interval = setInterval(() => getApiAndEmit(socket), 1000);
 	socket.on('disconnect', () => {
 		console.log('user disconnected', socket.id);
 		clearInterval(interval);
 	});
 });
+
+// http://4b6ce298b306.ngrok.io/blocknative-hook -- 1/17 WBTC-ETH local webhook
 
 app.post('/blocknative-hook', (req, res) => {
 	try {
@@ -59,3 +49,16 @@ app.post('/blocknative-hook', (req, res) => {
 });
 
 http.listen(PORT, () => console.log(`🚀 ${PORT}`));
+
+// let interval
+
+// if (interval) {
+//     clearInterval(interval);
+// }
+// interval = setInterval(() => getApiAndEmit(socket), 1000);
+
+// const getApiAndEmit = (socket) => {
+// 	const response = new Date();
+// 	// Emitting a new message. Will be consumed by the client
+// 	socket.emit('FromAPI', response);
+// };
