@@ -1,0 +1,8 @@
+[
+  {
+    "name": "global",
+    "id": "global",
+    "filters": [{"status":["pending", "confirmed"]}, {"value": {"gt": 0}}],
+    "type": "global"
+  }
+]
