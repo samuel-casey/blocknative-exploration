@@ -7,7 +7,11 @@ import sdkSetup from './sdkSetup'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import './App.css';
 
-// const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY FOR BN ACCOUNT
+/// @dev test
+// const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
+/// @dev test2
+// const DAPP_ID: string = 'c49c368d-6f2c-4933-9053-9116d1fe39d1' // API KEY #2 FOR BN ACCOUNT 
+
 const NETWORK_ID: number = 1 // mainnet
 
 const logTransactionEvent = (event: any) => console.log("event:", event.transaction)
