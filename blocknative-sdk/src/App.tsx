@@ -15,7 +15,7 @@ const logTransactionEvent = (event: any) => console.log("event:", event.transact
 const blocknative = new blocknativeSDK({
   dappId: DAPP_ID,
   networkId: NETWORK_ID,
-  // transactionHandlers: [logTransactionEvent]
+  transactionHandlers: [logTransactionEvent]
 })
 
 sdkSetup(blocknative, configuration)
