@@ -6,6 +6,10 @@ import sdkSetup from './sdkSetup'
 // import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import './App.css';
+import {addresses} from './addresses'
+
+const USDC_ETH = addresses.uniswap.USDC_ETH
+const 
 
 /// @dev test
 // const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
@@ -31,15 +35,13 @@ declare const window: any;
 const provider = window.ethereum
 const web3 = new Web3(provider)
 
-const USDC_ETH_ADDRESS = '0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc'
-
 interface Itx {
   hash: string;
 }
 
 const App = (): JSX.Element => {
 
-  const {emitter, details} =  blocknative.account(USDC_ETH_ADDRESS)
+  const {emitter, details} =  blocknative.account(USDC_ETH)
 
   const [txs, setTxs] = useState<Itx[] | any>([])
   const [valIncoming, setValIncoming] = useState(0)
