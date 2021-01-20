@@ -9,7 +9,6 @@ import './App.css';
 import {addresses} from './addresses'
 
 const USDC_ETH = addresses.uniswap.USDC_ETH
-const 
 
 /// @dev test
 // const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
@@ -52,8 +51,6 @@ const App = (): JSX.Element => {
   useEffect(() => {
 
     emitter.on("txConfirmed", (transaction: any) => {
-      console.log('emitter: ')
-      console.log(transaction)
       setTxs([...txs, transaction])
       if (transaction.direction !== "") console.log(transaction.direction)
       const ether = +web3.utils.fromWei(transaction.value)
