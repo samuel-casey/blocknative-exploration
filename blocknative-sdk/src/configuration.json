@@ -2,7 +2,7 @@
   {
     "name": "global",
     "id": "global",
-    "filters": [{"status":["pending", "confirmed"]}, {"value": {"gt": 0}}],
+    "filters": [{"status":["pending", "confirmed"]}],
     "type": "global"
   }
 ]

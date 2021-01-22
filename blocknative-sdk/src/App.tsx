@@ -17,12 +17,19 @@ const USDC_ETH = addresses.uniswap.USDC_ETH
 
 const NETWORK_ID: number = 1 // mainnet
 
-const logTransactionEvent = (event: any) => console.log("event:", event.transaction)
+const logTransactionEvent = (event: any) => {
+  if (event.transaction) {
+    console.log("event:", event.transaction)
+  } else {
+
+  }
+}
+// Uniswap v2 router: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d"
 
 const blocknative = new blocknativeSDK({
   dappId: DAPP_ID,
   networkId: NETWORK_ID,
-  transactionHandlers: [logTransactionEvent]
+  transactionHandlers: [logTransactionEvent],
 })
 
 sdkSetup(blocknative, configuration)
