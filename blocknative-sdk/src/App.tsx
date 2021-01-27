@@ -13,10 +13,6 @@ const cUSDT = addresses.compound.cUSDT
 
 
 // typescript stuffs
-//  enum valueType {
-//     pending = "pending",
-//     confirmed = "confirmed"
-//   }
  type TTransaction = any
 
 /// @dev test
