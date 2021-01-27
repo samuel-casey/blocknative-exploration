@@ -27,7 +27,6 @@ const NETWORK_ID: number = 1 // mainnet
 const blocknative = new blocknativeSDK({
   dappId: DAPP_ID,
   networkId: NETWORK_ID,
-  // transactionHandlers: [logTransactionEvent],
 })
 
 sdkSetup(blocknative, configuration)
