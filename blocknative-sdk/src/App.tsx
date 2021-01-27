@@ -26,19 +26,6 @@ const cUSDT = addresses.compound.cUSDT
 
 const NETWORK_ID: number = 1 // mainnet
 
-const logTransactionEvent = (event: any) => {
-  switch(event.transaction.eventCode)  {
-    case 'txPool':
-      console.log('txPool:' , event.transaction)
-      break;
-    case 'txConfirmed':
-      console.log('txConfirmed:' , event.transaction)
-      break;
-    default:
-      console.log('other:', event.transaction)
-      break;
-  }
-}
 // Uniswap v2 router: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d"
 
 const blocknative = new blocknativeSDK({
