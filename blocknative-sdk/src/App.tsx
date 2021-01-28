@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import blocknativeSDK from 'bnc-sdk';
 import configuration from './configuration.json'
 import sdkSetup from './sdkSetup'
-// import Loader from 'react-loader-spinner';
+import {ethers} from 'ethers'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import './App.css';
 import {addresses} from './addresses'
