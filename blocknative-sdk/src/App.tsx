@@ -9,17 +9,13 @@ import './App.css';
 import {addresses} from './addresses'
 import cUSDT_ABI from './cUSDT_ABI.json'
 
-const USDC_ETH = addresses.uniswap.USDC_ETH
 const cUSDT = addresses.compound.cUSDT
 
-    const e_provider = ethers.getDefaultProvider();
-
-    const inter = new ethers.utils.Interface(cUSDT_ABI);
-
-
+const e_provider = ethers.getDefaultProvider();
+const inter = new ethers.utils.Interface(cUSDT_ABI);
 
 // typescript stuffs
- type TTransaction = any
+type TTransaction = any
 
 /// @dev test
 const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
@@ -28,24 +24,10 @@ const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR
 
 const NETWORK_ID: number = 1 // mainnet
 
-// Uniswap v2 router: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d"
-
 const blocknative = new blocknativeSDK({
   dappId: DAPP_ID,
   networkId: NETWORK_ID,
 })
-
-const abi = new ethers.utils.Interface(cUSDT_ABI)
-
-// test function for understanding ethers methods
-// goal = decode a transaction using getTransaction and inter.parseTransaction similar to this post: https://ethereum.stackexchange.com/questions/67585/is-there-any-way-to-decode-to-address-from-gettransactionhash-input-of-a-token
-// output of function should be value of transaction
-// goal is to decode both a simple and a complex transaction
-const ethersTest = () => {
-
-}
-
-
 
 sdkSetup(blocknative, configuration)
 
@@ -85,17 +67,6 @@ const App = (): JSX.Element => {
     }
   }
 
-  const decodeTxAmount = (token: string, input: string): number => {
-    // decode input 
-    const value = +web3.eth.abi.decodeParameter('uint256', input)
-    switch (token) {
-      case 'cUSDT':
-        return value / 10 ** 6  
-      default:
-        return value
-    }    
-  }
-  
   const updateValueSums = (tokenType: string, valueType: string, transaction: TTransaction) => {    
     // find hex of value being transferred by slicing out part of transaction.input that indicates the method name
     const hexInput = transaction.input.slice(10, transaction.input.length)
@@ -106,45 +77,22 @@ const App = (): JSX.Element => {
 
     if (valueType === "pending") {
       if (!txHashesSet.has(transaction.hash)) {
-        setValIncoming(valIncoming + decodedValue)
+        // setValIncoming(valIncoming + decodedValue)
       }
     } else if (valueType === "confirmed") {
       if (txHashesSet.has(transaction.hash)) {
-        setValIncoming(valIncoming - decodedValue)
-        setValConfirmed(valConfirmed + decodedValue)
+        // setValIncoming(valIncoming - decodedValue)
+        // setValConfirmed(valConfirmed + decodedValue)
       } else {
-        setValConfirmed(valConfirmed + decodedValue)
+        // setValConfirmed(valConfirmed + decodedValue)
       }
     }
 
     console.log('tx value', decodedValue)
   }
 
-  const decodeTxInput = (transaction: TTransaction, token: string): number => {
-    // log status of tx
-    console.log(transaction.status, transaction)
+  const decodeTxInput = () => {
 
-    const methodHex = transaction.input.slice(0,10)
-    const methodInput = transaction.input.slice(10, transaction.input.length)
-    
-    // log code of method
-    console.log('method hex:', methodHex)
-    console.log('method input:', methodInput)
-
-    // find method being called by slicing it out of transaction.input
-    switch (methodHex) {
-      case '0xa0712d68':
-        console.log('mint method called')
-        break;
-      case '0xc5ebeaec':
-        console.log('borrow method called')
-        break;
-      default:
-        console.log('idk method called')
-        break;
-    }
-
-  return decodeTxAmount(token, methodInput)
   }
   const pendingTxData = pendingTxs ? pendingTxs.map((tx: any) => <><p key={tx.hash}>tx: {tx.hash}: {web3.utils.fromWei(tx.value)} ether</p></>) : null;
   
