@@ -154,6 +154,8 @@ const App = (): JSX.Element => {
  const decodeTxnValue = (async(txnHash: any) => {
       const tx = await e_provider.getTransaction(txnHash);
 
+        console.log(tx.data)
+
         const decodedInput = inter.parseTransaction({ data: tx.data, value: tx.value});
 
         // Decoded Transaction
@@ -182,31 +184,19 @@ const App = (): JSX.Element => {
     console.log('1-inch')
     callDecodeFunction('0x2d28c2d546142cd565f23ace7672e75b965630653d4859db1c6a3e70f29fea3d')
 
-    
-
-    // mint
-    // console.log(abi.parseTransaction({
-    //     data: '0xa0712d680000000000000000000000000000000000000000000000000000000041efa4c8'
-    //   }))
-
-    // borrow 
-    //  console.log(abi.parseTransaction({
-    //     data: '0xc5ebeaec00000000000000000000000000000000000000000000000000000005d21dba00'
-    //   }))
-
     // /// @notice functions to handle various mempool events
-    emitter.on("txPool", (transaction: TTransaction) => {
-      // addOrRemoveNewTx(transaction)
-      // updateValueSums("cUSDT", "pending", transaction)  
-      callDecodeFunction(transaction.hash)
-    })
+    // emitter.on("txPool", (transaction: TTransaction) => {
+    //   // addOrRemoveNewTx(transaction)
+    //   // updateValueSums("cUSDT", "pending", transaction)  
+    //   callDecodeFunction(transaction.hash)
+    // })
     
     // // need to handle transaction fail
-    emitter.on("txFailed", (transaction: TTransaction) =>  {
-      //   console.log(transaction.status, transaction)
-      //   addOrRemoveNewTx(transaction)
-      callDecodeFunction(transaction.hash)
-    })
+    // emitter.on("txFailed", (transaction: TTransaction) =>  {
+    //   //   console.log(transaction.status, transaction)
+    //   //   addOrRemoveNewTx(transaction)
+    //   callDecodeFunction(transaction.hash)
+    // })
 
     // emitter.on("txConfirmed", (transaction: TTransaction) => {
     //   addOrRemoveNewTx(transaction)
