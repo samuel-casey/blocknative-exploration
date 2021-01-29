@@ -49,6 +49,48 @@ const App = (): JSX.Element => {
 
   const txHashesSet = new Set()
 
+  // remove pending tx from list of all txs if confirmed tx === a tx in pending list 
+  const addOrRemoveNewTx = (transaction: TTransaction) => {
+    if (transaction.status === 'pending') {
+      if (txHashesSet.has(transaction.hash)) {
+        // remove tx from current txs State
+        const newTxs = pendingTxs.filter((tx: TTransaction) => tx.hash === transaction.hash)
+        // set new State
+        setPendingTxs(newTxs)
+      } else {
+        txHashesSet.add(transaction.hash)
+        setPendingTxs([...pendingTxs, transaction])
+      }
+    } else if (transaction.status === "confirmed") {
+      // add tx to txs State if it's confirmed
+      setConfirmedTxs([...confirmedTxs, transaction])
+    }
+  }
+
+  const updateValueSums = (tokenType: string, valueType: string, transaction: TTransaction) => {    
+    // find hex of value being transferred by slicing out part of transaction.input that indicates the method name
+    const hexInput = transaction.input.slice(10, transaction.input.length)
+    console.log('tx input', hexInput)
+
+    // decode amount being used in transaction
+    const decodedValue = decodeTxInput()
+
+    if (valueType === "pending") {
+      if (!txHashesSet.has(transaction.hash)) {
+        // setValIncoming(valIncoming + decodedValue)
+      }
+    } else if (valueType === "confirmed") {
+      if (txHashesSet.has(transaction.hash)) {
+        // setValIncoming(valIncoming - decodedValue)
+        // setValConfirmed(valConfirmed + decodedValue)
+      } else {
+        // setValConfirmed(valConfirmed + decodedValue)
+      }
+    }
+
+    console.log('tx value', decodedValue)
+  }
+
   const decodeTxInput = () => {
 
   }
@@ -92,16 +134,21 @@ const App = (): JSX.Element => {
 
     // /// @notice functions to handle various mempool events
     // emitter.on("txPool", (transaction: TTransaction) => {
+    //   // addOrRemoveNewTx(transaction)
+    //   // updateValueSums("cUSDT", "pending", transaction)  
     //   callDecodeFunction(transaction.hash)
     // })
     
     // // need to handle transaction fail
     // emitter.on("txFailed", (transaction: TTransaction) =>  {
     //   //   console.log(transaction.status, transaction)
+    //   //   addOrRemoveNewTx(transaction)
     //   callDecodeFunction(transaction.hash)
     // })
 
     // emitter.on("txConfirmed", (transaction: TTransaction) => {
+    //   addOrRemoveNewTx(transaction)
+    //   updateValueSums("cUSDT", "confirmed", transaction)
     // })
   }, [pendingTxs, confirmedTxs])
 
