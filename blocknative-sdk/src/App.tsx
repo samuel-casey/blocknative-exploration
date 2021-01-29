@@ -7,16 +7,22 @@ import {ethers} from 'ethers'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import './App.css';
 import {addresses} from './addresses'
+import cUSDT_ABI from './cUSDT_ABI.json'
 
 const USDC_ETH = addresses.uniswap.USDC_ETH
 const cUSDT = addresses.compound.cUSDT
+
+    const e_provider = ethers.getDefaultProvider();
+
+    const inter = new ethers.utils.Interface(cUSDT_ABI);
+
 
 
 // typescript stuffs
  type TTransaction = any
 
 /// @dev test
-// const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
+const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
 /// @dev test2
 // const DAPP_ID: string = 'c49c368d-6f2c-4933-9053-9116d1fe39d1' // API KEY #2 FOR BN ACCOUNT 
 
@@ -28,6 +34,18 @@ const blocknative = new blocknativeSDK({
   dappId: DAPP_ID,
   networkId: NETWORK_ID,
 })
+
+const abi = new ethers.utils.Interface(cUSDT_ABI)
+
+// test function for understanding ethers methods
+// goal = decode a transaction using getTransaction and inter.parseTransaction similar to this post: https://ethereum.stackexchange.com/questions/67585/is-there-any-way-to-decode-to-address-from-gettransactionhash-input-of-a-token
+// output of function should be value of transaction
+// goal is to decode both a simple and a complex transaction
+const ethersTest = () => {
+
+}
+
+
 
 sdkSetup(blocknative, configuration)
 
@@ -132,24 +150,68 @@ const App = (): JSX.Element => {
   
   const confirmedTxData = confirmedTxs ? confirmedTxs.map((tx: any) => <><p key={tx.hash}>tx: {tx.hash}: {web3.utils.fromWei(tx.value)} ether</p></>) : null;
 
+ // ETHERS DECODE FUNCTION
+ const decodeTxnValue = (async(txnHash: any) => {
+      const tx = await e_provider.getTransaction(txnHash);
+
+        const decodedInput = inter.parseTransaction({ data: tx.data, value: tx.value});
+
+        // Decoded Transaction
+        return {
+            function_name: decodedInput.name,
+            from: tx.from,
+            to: decodedInput.args[0],
+            erc20Value: Number(decodedInput.args[0])
+          };        
+    });
+
+    const callDecodeFunction = async (txnHash: any) => {
+      const result = await decodeTxnValue(txnHash)
+      console.log(txnHash, result.erc20Value)
+    }
+
+
   useEffect(() => {
-        
-    /// @notice functions to handle various mempool events
+     
+    console.log('basic mint')
+    callDecodeFunction('0x442d693bd5a1188c2b60d984feb42d3aedd2272cc11fb1e3aceed79e76f0bd9a')
+    
+    console.log('basic borrow')
+    callDecodeFunction('0x2922821ce0afe1ca0b076f93bdf76063858b60490e6533952c9e33950d1c73cf')
+    
+    console.log('1-inch')
+    callDecodeFunction('0x2d28c2d546142cd565f23ace7672e75b965630653d4859db1c6a3e70f29fea3d')
+
+    
+
+    // mint
+    // console.log(abi.parseTransaction({
+    //     data: '0xa0712d680000000000000000000000000000000000000000000000000000000041efa4c8'
+    //   }))
+
+    // borrow 
+    //  console.log(abi.parseTransaction({
+    //     data: '0xc5ebeaec00000000000000000000000000000000000000000000000000000005d21dba00'
+    //   }))
+
+    // /// @notice functions to handle various mempool events
     emitter.on("txPool", (transaction: TTransaction) => {
-      addOrRemoveNewTx(transaction)
-      updateValueSums("cUSDT", "pending", transaction)  
+      // addOrRemoveNewTx(transaction)
+      // updateValueSums("cUSDT", "pending", transaction)  
+      callDecodeFunction(transaction.hash)
     })
     
-    // need to handle transaction fail
+    // // need to handle transaction fail
     emitter.on("txFailed", (transaction: TTransaction) =>  {
-      console.log(transaction.status, transaction)
-      addOrRemoveNewTx(transaction)
+      //   console.log(transaction.status, transaction)
+      //   addOrRemoveNewTx(transaction)
+      callDecodeFunction(transaction.hash)
     })
 
-    emitter.on("txConfirmed", (transaction: TTransaction) => {
-      addOrRemoveNewTx(transaction)
-      updateValueSums("cUSDT", "confirmed", transaction)
-    })
+    // emitter.on("txConfirmed", (transaction: TTransaction) => {
+    //   addOrRemoveNewTx(transaction)
+    //   updateValueSums("cUSDT", "confirmed", transaction)
+    // })
   }, [pendingTxs, confirmedTxs])
 
   
