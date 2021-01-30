@@ -17,9 +17,9 @@ const cUSDT = addresses.compound.cUSDT
 type TTransaction = any
 
 /// @dev test
-const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
+// const DAPP_ID: string = 'ce6489a0-beeb-4c0a-99ff-d168118b35e5' // API KEY #1 FOR BN ACCOUNT
 /// @dev test2
-// const DAPP_ID: string = 'c49c368d-6f2c-4933-9053-9116d1fe39d1' // API KEY #2 FOR BN ACCOUNT 
+const DAPP_ID: string = 'c49c368d-6f2c-4933-9053-9116d1fe39d1' // API KEY #2 FOR BN ACCOUNT 
 
 const NETWORK_ID: number = 1 // mainnet
 
@@ -64,6 +64,8 @@ const App = (): JSX.Element => {
     // get txn using ethers provider
     const tx = await e_provider.getTransaction(txnHash);
 
+
+        console.log(tx)
         // decode input of txn
         const decodedInput = inter.parseTransaction({ data: tx.data, value: tx.value});
 
@@ -84,18 +86,17 @@ const App = (): JSX.Element => {
       console.dir(result)
     }
 
-  const decodeTxInput = () => {
+  const decodeTxInput = (txnHash: any) => {
     // main transaction function call (execute)
-    callDecodeFunction('0x853eaedce195464f407ca9c51825ae20995265bf34dfbb1076c482f86f4c7b8c', LoanShifterTaker_ABI)
+    callDecodeFunction(txnHash, LoanShifterTaker_ABI)
     
     // first delegate call
     // callDecodeFunction()
   }
 
   useEffect(() => {
-    decodeTxInput()
+    decodeTxInput('0x853eaedce195464f407ca9c51825ae20995265bf34dfbb1076c482f86f4c7b8c')
 
-    // callDecodeFunction('0x442d693bd5a1188c2b60d984feb42d3aedd2272cc11fb1e3aceed79e76f0bd9a', cUSDT_ABI)
   }, [])
   
   return (

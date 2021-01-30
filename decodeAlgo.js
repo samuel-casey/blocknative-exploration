@@ -488,10 +488,11 @@ const exampleTransaction = {
 
 // loop through net balance changes of transaction and find delta for watchedContracts
 // return inflows, outflows, net flows for watchedContract
-const decodeTransactionFlows = (transaction, watchedContracts) => {
+// cUSDC address: 0x39aa39c021dfbae8fac545936693ac917d5e7563
+const decodeTransactionFlows = (transaction, watchedContracts, decimals) => {
 	transaction.netBalanceChanges.forEach((item) => {
 		if (watchedContracts.includes(item.address)) {
-			console.log(item.balanceChanges[0]);
+			console.log(item.balanceChanges[0].delta);
 		}
 	});
 };
