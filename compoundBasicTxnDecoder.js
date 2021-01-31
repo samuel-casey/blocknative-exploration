@@ -1,6 +1,7 @@
 const ethers = require('ethers');
 const cUSDT_ABI = require('./blocknative-sdk/src/cUSDT_ABI.json');
 
+// ABI for Compound USDT market
 const abi = cUSDT_ABI;
 
 const provider = ethers.getDefaultProvider();
