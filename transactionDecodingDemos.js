@@ -1,4 +1,4 @@
-const exampleTransaction = {
+const exampleBlocknativeTransaction = {
 	status: 'confirmed',
 	monitorId: 'GETH_1_A_PROD',
 	monitorVersion: '0.79.5',
@@ -489,7 +489,11 @@ const exampleTransaction = {
 // loop through net balance changes of transaction and find delta for watchedContracts
 // return inflows, outflows, net flows for watchedContract
 // cUSDC address: 0x39aa39c021dfbae8fac545936693ac917d5e7563
-const decodeTransactionFlows = (transaction, watchedContracts, decimals) => {
+const decodeBlocknativeTransactionFlows = (
+	transaction,
+	watchedContracts,
+	decimals
+) => {
 	transaction.netBalanceChanges.forEach((item) => {
 		if (watchedContracts.includes(item.address)) {
 			console.log(item.balanceChanges[0].delta);
@@ -497,6 +501,7 @@ const decodeTransactionFlows = (transaction, watchedContracts, decimals) => {
 	});
 };
 
-decodeTransactionFlows(exampleTransaction, [
+// for a transaction that involves the initiator buying a PoolTogether ticket, and PoolTogether depositing USDC in Compound
+decodeBlocknativeTransactionFlows(exampleTransaction, [
 	'0x39aa39c021dfbae8fac545936693ac917d5e7563',
 ]);
