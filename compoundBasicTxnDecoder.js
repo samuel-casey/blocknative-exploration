@@ -1,0 +1,45 @@
+const ethers = require('ethers');
+const cUSDT_ABI = require('./blocknative-sdk/src/cUSDT_ABI.json');
+
+const abi = cUSDT_ABI;
+
+const provider = ethers.getDefaultProvider();
+const inter = new ethers.utils.Interface(abi);
+
+// ETHERS DECODE FUNCTION
+const decodeTxnValue = async (txnHash) => {
+	// get txn using ethers provider
+	const tx = await provider.getTransaction(txnHash);
+
+	console.log('transaction:', tx);
+
+	// decode input of txn
+	const decodedInput = inter.parseTransaction({
+		data: tx.data,
+		value: tx.value,
+	});
+
+	// Decoded Transaction
+	return {
+		functionName: decodedInput.name,
+		sighash: decodedInput.sighash,
+		from: tx.from,
+		to: decodedInput.args[0],
+		erc20Value: Number(decodedInput.args[0]),
+	};
+};
+
+const callDecodeFunction = async (txnHash, tokenSymbol, tokenDecimals) => {
+	const result = await decodeTxnValue(txnHash, abi);
+	console.log('decoded transaction:', {
+		function: result.functionName,
+		token: tokenSymbol,
+		value: result.erc20Value / 10 ** tokenDecimals,
+	});
+};
+
+callDecodeFunction(
+	'0x442d693bd5a1188c2b60d984feb42d3aedd2272cc11fb1e3aceed79e76f0bd9a',
+	'USDT',
+	6
+);

@@ -81,7 +81,7 @@ const App = (): JSX.Element => {
           };        
     });
 
-    const callDecodeFunction = async (txnHash: any, abi: any) => {
+  const callDecodeFunction = async (txnHash: any, abi: any) => {
       const result = await decodeTxnValue(txnHash, abi)
       console.dir(result)
     }
