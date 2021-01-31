@@ -1,3 +1,9 @@
+/*
+
+Functionality for decoding erc20 value involved in a pending or confirmed transactions that involve 1 contract and 1 erc20 token. Can be used in conjunction with Blocknative SDK/API or another mempool monitor. Must have ABI of contract you're monitoring in order for it to work. 
+
+*/
+
 const ethers = require('ethers');
 const cUSDT_ABI = require('./blocknative-sdk/src/cUSDT_ABI.json');
 
