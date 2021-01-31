@@ -1,3 +1,9 @@
+/*
+
+Functionality for decoding a confirmed txn outputted by the Blocknative SDK/API. Decodes value of all ERC20 tokens involved in internal transactions.
+
+*/
+
 // for a transaction that involves the initiator buying a PoolTogether ticket, and PoolTogether depositing USDC in Compound
 const exampleBlocknativeTransaction = {
 	status: 'confirmed',
