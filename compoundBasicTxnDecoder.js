@@ -39,8 +39,16 @@ const callDecodeFunction = async (txnHash, tokenSymbol, tokenDecimals) => {
 	});
 };
 
+// example supply transaction
 callDecodeFunction(
 	'0x442d693bd5a1188c2b60d984feb42d3aedd2272cc11fb1e3aceed79e76f0bd9a',
+	'USDT',
+	6
+);
+
+// example borrow transaction
+callDecodeFunction(
+	'0x2922821ce0afe1ca0b076f93bdf76063858b60490e6533952c9e33950d1c73cf',
 	'USDT',
 	6
 );
