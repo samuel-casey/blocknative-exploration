@@ -1,3 +1,4 @@
+// for a transaction that involves the initiator buying a PoolTogether ticket, and PoolTogether depositing USDC in Compound
 const exampleBlocknativeTransaction = {
 	status: 'confirmed',
 	monitorId: 'GETH_1_A_PROD',
@@ -437,7 +438,7 @@ const exampleBlocknativeTransaction = {
 			],
 		},
 		{
-			address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+			address: '0xb7277a6e95992041568d9391d09d0122023778a2',
 			balanceChanges: [
 				{
 					delta: '-2000000000',
@@ -488,20 +489,25 @@ const exampleBlocknativeTransaction = {
 
 // loop through net balance changes of transaction and find delta for watchedContracts
 // return inflows, outflows, net flows for watchedContract
-// cUSDC address: 0x39aa39c021dfbae8fac545936693ac917d5e7563
-const decodeBlocknativeTransactionFlows = (
-	transaction,
-	watchedContracts,
-	decimals
-) => {
-	transaction.netBalanceChanges.forEach((item) => {
-		if (watchedContracts.includes(item.address)) {
-			console.log(item.balanceChanges[0].delta);
+const decodeBlocknativeTransactionFlows = (transaction, watchedContracts) => {
+	const values = {};
+
+	// loop through all net balance changes of transaction -> find value if bal changes for watched addresses -> add them to the values object
+	transaction.netBalanceChanges.forEach((contract) => {
+		if (Object.keys(watchedContracts).includes(contract.address)) {
+			const value = contract.balanceChanges[0].delta;
+			const contractName = watchedContracts[contract.address][0];
+			const contractTokenDecimals = watchedContracts[contract.address][1];
+			values[contractName] = value / 10 ** contractTokenDecimals;
 		}
 	});
+	return values;
 };
 
-// for a transaction that involves the initiator buying a PoolTogether ticket, and PoolTogether depositing USDC in Compound
-decodeBlocknativeTransactionFlows(exampleTransaction, [
-	'0x39aa39c021dfbae8fac545936693ac917d5e7563',
-]);
+console.log(
+	decodeBlocknativeTransactionFlows(exampleBlocknativeTransaction, {
+		'0x39aa39c021dfbae8fac545936693ac917d5e7563': ['cUSDC', 6],
+		'0xb7277a6e95992041568d9391d09d0122023778a2': ['USDC', 6],
+		'0xde9ec95d7708b8319ccca4b8bc92c0a3b70bf416': ['PcUSDC', 6],
+	})
+);
